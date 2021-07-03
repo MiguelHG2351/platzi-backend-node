@@ -9,7 +9,7 @@ function moviesApi(app) {
     const movieServices = new MovieServices()
 
     router.get('/', async (req, res, next) => {
-        const { tags  } = req.query
+        const { tags } = req.query
         
         try {
             const movies = await movieServices.getMovies({tags})
@@ -24,7 +24,7 @@ function moviesApi(app) {
     })
 
     router.get('/:movieId', async (req, res, next) => {
-        const movieId = req.params
+        const { movieId } = req.params
         
         try {
             const movies = await movieServices.getMovie({ movieId })
