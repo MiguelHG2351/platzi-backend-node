@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index",
+    "start": "node index --inspect",
     "dev": "set DEBUG=app:* && nodemon index",
     "test": "mocha --exit",
     "cover": "nyc npm run test",
