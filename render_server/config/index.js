@@ -6,5 +6,7 @@ module.exports = {
     isDev: process.env.NODE_ENV !== 'production',
     port: process.env.PORT || 8000,
     apiUrl: `http://localhost:3000`,
-    apiKeyToken: process.env.PUBLIC_API_KEY_TOKEN
+    apiKeyToken: process.env.PUBLIC_API_KEY_TOKEN,
+    googleClientId: process.env.GOOGLE_CLIENT_ID,
+    googleSecretClient: process.env.GOOGLE_SECRET_CLIENT
 }

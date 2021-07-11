@@ -18,6 +18,9 @@ const TWO_HOURS_IN_SEC = 7200000
 // basic strategies
 require('./utils/auth/strategies/basic')
 
+// google strategies
+require('./utils/auth/strategies/oauth')
+
 app.post('/auth/sign-in', (req, res, next) => {
     const { rememberMe } = req.body
 
@@ -105,6 +108,27 @@ app.delete('/user-movies/:userMovieId', async (req, res, next) => {
     } catch (error) {
         next(error)
     }
+})
+
+app.get('/auth/google-oauth', passport.authenticate('google-oauth', {
+    scope: ['email', 'profile', 'openid']
+}))
+
+app.get('/auth/google-0Auth/callback', passport.authenticate('google-oauth', {
+    session: false
+}), function (req, res, next) {
+    if(!req.user) {
+        return next(boom.unauthorized())
+    }
+
+    const { token, ...user } = req.user
+    console.log(req.token)
+    res.cookie('token', token, {
+        httpOnly: !config.isDev,
+        secure: !config.isDev,
+    })
+
+    res.status(200).json(user)
 })
 
 app.listen(config.port, () => {

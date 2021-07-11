@@ -6,7 +6,7 @@ const ApiKeysService = require('../services/apiKeys')
 const UserService = require('../services/users')
 const validationHandler = require('../utils/middlewares/validationHandler')
 
-const { createUserSchema } = require('../utils/schema/user')
+const { createUserSchema, createProviderUserSchema } = require('../utils/schema/user')
 
 const { config } = require('../config')
 
@@ -73,6 +73,39 @@ function authApi(app) {
                 data: createdUserId,
                 message: 'user created'
             })
+        } catch(err) {
+            next(err)
+        }
+    })
+
+    router.post('/sign-provider', validationHandler(createProviderUserSchema), async (req, res, next) => {
+        const { apiKeyToken, ...user } = req.body
+        if(!apiKeyToken) {
+            return next(boom.unauthorized())
+        }
+
+        try {
+            const queryUser = await userServices.getOrCreateUser({ user })
+            const apiKey = await apiKeysService.getApiKey({ token: apiKeyToken })
+
+            if(!apiKey) {
+                return next(boom.unauthorized())
+            }
+
+            const { _id: id, name, email } = queryUser
+            const payload = {
+                id,
+                name,
+                email,
+                scopes: apiKey.scopes
+            }
+
+            const token = jwt.sign(payload, config.authJWTSecret, {
+                expiresIn: '10h'
+            })
+
+            res.status(200).json({ token, user: { id, name, email } })
+
         } catch(err) {
             next(err)
         }

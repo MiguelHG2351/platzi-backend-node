@@ -1,4 +1,5 @@
 const express = require('express')
+const helmet = require('helmet')
 const app = express()
 
 const { config } = require('./config')
@@ -9,7 +10,11 @@ const authApi = require('./routes/auth')
 const { logErrors, errorHandler, wrapError } = require('./utils/middlewares/errorHandlers')
 const notFoundHandler = require('./utils/middlewares/notFoundHandler')
 
+app.use(helmet({
+    contentSecurityPolicy: false
+}))
 app.use(express.json())
+
 
 authApi(app)
 moviesApi(app)

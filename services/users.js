@@ -26,6 +26,18 @@ class UserDevice {
 
         return createUserId
     }
+
+    async getOrCreateUser({ user }) {
+        const queryUser = await this.getUser({ email: user.email })
+
+        if(queryUser) {
+            return queryUser
+        }
+
+        await this.createUser({ user });
+
+        return await this.getUser({ email: user.email })
+    }
 }
 
 module.exports = UserDevice

@@ -5,7 +5,6 @@ const joi = require('joi')
 function validate(data, schema) {
     schema = !joi.isSchema(schema) ? joi.object(schema) : schema
     const { error } = schema.validate(data)
-    console.log(error)
     
     return error;
 }
