@@ -5,7 +5,6 @@ const boom = require('@hapi/boom')
 const UsersServices = require('../../../services/users')
 const { config } = require('../../../config/')
 
-console.log(config.authJWTSecret)
 passport.use(new Strategy({
     secretOrKey: config.authJWTSecret,
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
